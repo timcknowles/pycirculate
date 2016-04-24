@@ -19,7 +19,7 @@ import warnings
 
 app = Flask(__name__)
 
-ANOVA_MAC_ADDRESS = "78:A5:04:38:B3:FA"
+ANOVA_MAC_ADDRESS = "F4:B8:5E:AF:F8:D6"
 
 
 class RESTAnovaController(AnovaController):
