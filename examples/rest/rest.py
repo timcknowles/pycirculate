@@ -6,9 +6,10 @@ Make sure to send requests with the HTTP header "Content-Type: application/json"
 NOTE: Only a single BlueTooth connection can be open to the Anova at a time.  So
 if you want to scale this API with multi-processing, keep that in mind to prevent errors
 such as:
-    `BTLEException: Failed to connect to peripheral 78:A5:04:38:B3:FA, addr type: public`
+    `BTLEException: Failed to connect to peripheral F4:B8:5E:AF:F8:D6, addr type: public`
 """
 from flask import Flask, request, jsonify, abort, make_response
+from flask.ext.cors import CORS
 from pycirculate.anova import AnovaController
 from threading import Timer
 import datetime
@@ -18,6 +19,7 @@ import sys
 import warnings
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 ANOVA_MAC_ADDRESS = "F4:B8:5E:AF:F8:D6"
 
@@ -182,7 +184,6 @@ def stop_timer():
     output = {"timer_status": app.anova_controller.stop_timer()}
     return jsonify(output)
 
-
 class AuthMiddleware(object):
     """
     HTTP Basic Auth wsgi middleware.  Must be used in conjunction with SSL.
@@ -212,7 +213,6 @@ class AuthMiddleware(object):
             [('Content-Type', 'text/html'),
              ('WWW-Authenticate', 'Basic realm="Login"')])
         return [b'Login']
-
 
 def main():
     # Setup logging
